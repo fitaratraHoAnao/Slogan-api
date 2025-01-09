@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Dashboard Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Memphis:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -18,12 +18,12 @@
                             "900": "#0f172a"
                         },
                         "deep-black": "#020617",
-                        "gradient-start": "#22d3ee",
-                        "gradient-mid": "#3b82f6",
-                        "gradient-end": "#a855f7"
+                        "gradient-start": "#00ffff",
+                        "gradient-mid": "#00bfff",
+                        "gradient-end": "#1e90ff"
                     },
                     fontFamily: {
-                        'sans': ['Memphis', 'sans-serif'],
+                        'sans': ['Orbitron', 'sans-serif'],
                     },
                 },
             },
@@ -31,8 +31,12 @@
     </script>
     <style>
         body {
-            font-family: 'Memphis', sans-serif;
+            font-family: 'Orbitron', sans-serif;
             background-color: #020617;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 255, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(30, 144, 255, 0.05) 0%, transparent 20%);
+            background-attachment: fixed;
         }
         .custom-scrollbar::-webkit-scrollbar {
             width: 4px;
@@ -41,7 +45,7 @@
             background: #1e293b;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background-color: #3b82f6;
+            background-color: #00bfff;
             border-radius: 20px;
         }
         .capitalize {
@@ -51,7 +55,7 @@
             word-break: break-all;
         }
         .bg-deep-black {
-            background-color: #020617;
+            background-color: rgba(2, 6, 23, 0.8);
         }
         @keyframes pulse {
             0%, 100% { opacity: 0.5; }
@@ -88,28 +92,35 @@
             animation: slideUp 0.3s ease-in-out forwards;
         }
         .gradient-bg {
-            background: linear-gradient(135deg, #22d3ee, #3b82f6, #a855f7);
+            background: linear-gradient(135deg, #00ffff, #00bfff, #1e90ff);
         }
         .gradient-text {
-            background: linear-gradient(135deg, #22d3ee, #3b82f6, #a855f7);
+            background: linear-gradient(135deg, #00ffff, #00bfff, #1e90ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-family: 'Memphis', sans-serif;
+            font-family: 'Orbitron', sans-serif;
         }
-        .memphis-heading {
-            font-family: 'Memphis', sans-serif;
+        .orbitron-heading {
+            font-family: 'Orbitron', sans-serif;
             font-weight: 700;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
     </style>
 </head>
 <body class="bg-deep-black text-gray-100">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-80 transform overflow-y-auto bg-gray-900 transition-all duration-300 ease-in-out -translate-x-full md:relative md:translate-x-0 border-r border-blue-500">
+        <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-80 transform overflow-y-auto bg-gray-900 transition-all duration-300 ease-in-out -translate-x-full md:relative md:translate-x-0 scrollbar-hide">
             <div class="flex h-full flex-col">
                 <div class="flex flex-col">
                     <div class="flex items-center justify-between p-4 h-16">
-                        <h2 id="sidebarTitle" class="text-sm font-medium text-white flex items-center memphis-heading">
+                        <h2 id="sidebarTitle" class="text-sm font-medium text-white flex items-center orbitron-heading">
                             <img src="https://i.ibb.co/XYk4dXn/image.png" alt="API" class="w-5 h-5 mr-2" />
                             <span id="sidebarTitleText" class="gradient-text">API Dashboard Pro</span>
                         </h2>
@@ -138,7 +149,7 @@
         <!-- Main content -->
         <div class="relative flex flex-1 flex-col overflow-y-auto bg-deep-black">
             <!-- Header -->
-            <header class="sticky top-0 z-40 bg-gray-900 border-b border-blue-500">
+            <header class="sticky top-0 z-40 bg-gray-900 bg-opacity-90 border-b border-blue-500">
                 <div class="container mx-auto">
                     <div class="flex flex-col">
                         <div class="flex h-16 items-center justify-between px-4">
@@ -159,56 +170,56 @@
             </header>
 
             <!-- Main content -->
-            <main id="mainContent" class="flex-1 px-4 py-4 bg-gray-900">
+            <main id="mainContent" class="flex-1 px-4 py-4 bg-gray-900 bg-opacity-50">
                 <div class="max-w-7xl mx-auto space-y-4">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="bg-gray-800 rounded-lg border-2 border-blue-500 px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg border-2 border-gradient-mid px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
                             <div class="gradient-text mb-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                 </svg>
                             </div>
-                            <h3 class="text-sm font-medium text-gray-100 mb-1 memphis-heading">Total Endpoints</h3>
+                            <h3 class="text-sm font-medium text-gray-100 mb-1 orbitron-heading">Total Endpoints</h3>
                             <p id="totalEndpoints" class="text-2xl font-semibold text-white loading-pulse gradient-text">--</p>
                         </div>
 
-                        <div class="bg-gray-800 rounded-lg border-2 border-blue-500 px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg border-2 border-gradient-mid px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
                             <div class="gradient-text mb-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
                                 </svg>
                             </div>
-                            <h3 class="text-sm font-medium text-gray-100 mb-1 memphis-heading">Total Categories</h3>
+                            <h3 class="text-sm font-medium text-gray-100 mb-1 orbitron-heading">Total Categories</h3>
                             <p id="totalCategories" class="text-2xl font-semibold text-white loading-pulse gradient-text">--</p>
                         </div>
 
-                        <div class="bg-gray-800 rounded-lg border-2 border-blue-500 px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg border-2 border-gradient-mid px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
                             <div class="gradient-text mb-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                                 </svg>
                             </div>
-                            <h3 class="text-sm font-medium text-gray-100 mb-1 memphis-heading">Battery</h3>
+                            <h3 class="text-sm font-medium text-gray-100 mb-1 orbitron-heading">Battery</h3>
                             <p class="text-2xl font-semibold text-white loading-pulse gradient-text" id="batteryLevel">--</p>
                         </div>
 
-                        <div class="bg-gray-800 rounded-lg border-2 border-blue-500 px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg border-2 border-gradient-mid px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
                             <div class="gradient-text mb-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                             </div>
-                            <h3 class="text-sm font-medium text-gray-100 mb-1 memphis-heading">Current Date</h3>
+                            <h3 class="text-sm font-medium text-gray-100 mb-1 orbitron-heading">Current Date</h3>
                             <p class="text-2xl font-semibold text-white loading-pulse gradient-text" id="currentDate">--</p>
                         </div>
 
-                        <div class="bg-gray-800 rounded-lg border-2 border-blue-500 px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg border-2 border-gradient-mid px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
                             <div class="gradient-text mb-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
-                            <h3 class="text-sm font-medium text-gray-100 mb-1 memphis-heading">Current Time</h3>
+                            <h3 class="text-sm font-medium text-gray-100 mb-1 orbitron-heading">Current Time</h3>
                             <p class="text-2xl font-semibold text-white loading-pulse gradient-text" id="currentTime">--</p>
                         </div>
                     </div>
@@ -218,9 +229,9 @@
     </div>
 
     <!-- Welcome Popup -->
-    <div id="welcomePopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-gray-800 rounded-lg border-2 border-blue-500 p-6 max-w-md w-full mx-4 shadow-lg">
-            <h2 id="welcomeTitle" class="text-2xl font-bold gradient-text mb-4 memphis-heading">Welcome to API Dashboard Pro!</h2>
+    <div id="welcomePopup" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 bg-opacity-90 rounded-lg border-2 border-gradient-mid p-6 max-w-md w-full mx-4 shadow-lg">
+            <h2 id="welcomeTitle" class="text-2xl font-bold gradient-text mb-4 orbitron-heading">Welcome to API Dashboard Pro!</h2>
             <p class="text-gray-100 mb-6">Get started by exploring our API categories and endpoints. Use the search function to find specific APIs quickly.</p>
             <div class="space-y-4">
                 <div class="flex items-start">
@@ -242,7 +253,7 @@
                     <p class="text-gray-100">Use the search bar to find specific APIs</p>
                 </div>
             </div>
-            <button id="closeWelcomePopup" class="mt-6 w-full gradient-bg text-white py-2 px-4 rounded-md hover:opacity-90 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gradient-start focus:ring-opacity-50 transform hover:scale-105 memphis-heading">
+            <button id="closeWelcomePopup" class="mt-6 w-full gradient-bg text-white py-2 px-4 rounded-md hover:opacity-90 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gradient-start focus:ring-opacity-50 transform hover:scale-105 orbitron-heading">
                 Get Started
             </button>
         </div>
@@ -288,14 +299,14 @@
         endpointDiv.className = 'rounded-md mb-1';
 
         const endpointButton = document.createElement('button');
-        endpointButton.className = 'flex w-full items-center justify-between px-3 py-2 text-sm text-gray-100 hover:bg-gray-700 transition-colors duration-200 ease-in-out rounded-md focus:outline-none focus:ring-2 focus:ring-gradient-start';
+        endpointButton.className = 'flex w-full items-center justify-between px-3 py-2 text-sm text-gray-100 hover:bg-gray-800 transition-colors duration-200 ease-in-out rounded-md focus:outline-none focus:ring-2 focus:ring-gradient-start';
         endpointButton.innerHTML = `
             <span class="capitalize">${endpoint.name}</span>
             <span class="bg-gray-700 text-gray-100 text-xs px-2 py-0.5 rounded">GET</span>
         `;
 
         const endpointDetails = document.createElement('div');
-        endpointDetails.className = 'mt-2 px-3 py-2 text-xs text-gray-300 bg-gray-700 rounded-md hidden';
+        endpointDetails.className = 'mt-2 px-3 py-2 text-xs text-gray-300 bg-gray-800 rounded-md hidden';
         endpointDetails.innerHTML = `
             <p class="mb-2"><strong class="text-gray-100">Endpoint:</strong> <span class="break-all">${endpoint.endpoint}</span></p>
             <p class="mb-3"><strong class="text-gray-100">Description:</strong> ${endpoint.description}</p>
@@ -338,7 +349,7 @@
             categoryDiv.className = 'mb-1';
 
             const categoryButton = document.createElement('button');
-            categoryButton.className = 'flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm font-medium text-gray-100 transition-colors duration-200 ease-in-out hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gradient-start';
+            categoryButton.className = 'flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm font-medium text-gray-100 transition-colors duration-200 ease-in-out hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gradient-start';
             categoryButton.innerHTML = `
                 <span class="capitalize">${category}</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor">
@@ -437,10 +448,10 @@
     showNotificationsBtn.addEventListener('click', () => {
         const notificationsHTML = `
             <div class="max-w-4xl mx-auto">
-                <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden border-2 border-blue-500">
+                <div class="bg-gray-800 bg-opacity-90 rounded-xl shadow-lg overflow-hidden border-2 border-gradient-mid">
                     <div class="p-6">
                         <div class="flex items-center justify-between mb-6">
-                            <h2 class="text-2xl font-bold gradient-text memphis-heading">Notifications</h2>
+                            <h2 class="text-2xl font-bold gradient-text orbitron-heading">Notifications</h2>
                             <button id="closeNotifications" class="text-gray-100 hover:text-white focus:outline-none focus:ring-2 focus:ring-gradient-start p-2 rounded-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -449,7 +460,7 @@
                         </div>
                         ${notifications.map((notification, index) => `
                             <div class="py-4 ${index !== 0 ? 'border-t border-gray-700' : ''}">
-                                <h3 class="text-lg font-semibold gradient-text mb-2 memphis-heading">${notification.title}</h3>
+                                <h3 class="text-lg font-semibold gradient-text mb-2 orbitron-heading">${notification.title}</h3>
                                 <p class="text-gray-300">${notification.description}</p>
                             </div>
                         `).join('')}
@@ -605,3 +616,4 @@
     </script>
 </body>
 </html>
+
