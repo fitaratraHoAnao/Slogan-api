@@ -4,15 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rest API Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="https://i.ibb.co/XYk4dXn/image.png">
     <style>
+        :root {
+            --primary: #00bcd4;
+            --primary-light: #62efff;
+            --primary-dark: #008ba3;
+            --secondary: #1de9b6;
+            --secondary-light: #6effe8;
+            --secondary-dark: #00b686;
+            --background: #121212;
+            --surface: #1e1e1e;
+            --error: #cf6679;
+            --on-primary: #000000;
+            --on-secondary: #000000;
+            --on-background: #ffffff;
+            --on-surface: #ffffff;
+            --on-error: #000000;
+        }
+
         body { 
-            background: #000;
+            background: var(--background);
+            color: var(--on-background);
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             overflow-x: hidden;
-            font-family: 'Inter', sans-serif;
         }
 
         .animated-bg {
@@ -28,33 +46,33 @@
         .circle {
             position: absolute;
             border-radius: 50%;
-            background: radial-gradient(circle at center, rgba(6, 182, 212, 0.15), transparent 70%);
+            background: radial-gradient(circle at center, rgba(0, 188, 212, 0.1), transparent 70%);
             will-change: transform;
             transform-origin: center center;
         }
 
         @keyframes circle1 {
             0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(100px, 100px) scale(1.1); }
+            50% { transform: translate(50px, 50px) scale(1.05); }
             100% { transform: translate(0, 0) scale(1); }
         }
 
         @keyframes circle2 {
-            0% { transform: translate(0, 0) scale(0.9); }
-            50% { transform: translate(-100px, 100px) scale(1); }
-            100% { transform: translate(0, 0) scale(0.9); }
+            0% { transform: translate(0, 0) scale(0.95); }
+            50% { transform: translate(-50px, 50px) scale(1); }
+            100% { transform: translate(0, 0) scale(0.95); }
         }
 
         @keyframes circle3 {
-            0% { transform: translate(0, 0) scale(1.1); }
-            50% { transform: translate(50px, -100px) scale(1); }
-            100% { transform: translate(0, 0) scale(1.1); }
+            0% { transform: translate(0, 0) scale(1.05); }
+            50% { transform: translate(25px, -50px) scale(1); }
+            100% { transform: translate(0, 0) scale(1.05); }
         }
 
         @keyframes circle4 {
-            0% { transform: translate(0, 0) scale(0.8); }
-            50% { transform: translate(-50px, -50px) scale(1); }
-            100% { transform: translate(0, 0) scale(0.8); }
+            0% { transform: translate(0, 0) scale(0.9); }
+            50% { transform: translate(-25px, -25px) scale(1); }
+            100% { transform: translate(0, 0) scale(0.9); }
         }
 
         .circle:nth-child(1) {
@@ -103,7 +121,7 @@
             position: absolute;
             width: 2px;
             height: 2px;
-            background: rgba(6, 182, 212, 0.5);
+            background: var(--primary);
             border-radius: 50%;
             opacity: 0;
             will-change: transform, opacity;
@@ -115,10 +133,10 @@
                 opacity: 0;
             }
             20% {
-                opacity: 1;
+                opacity: 0.5;
             }
             80% {
-                opacity: 1;
+                opacity: 0.5;
             }
             100% {
                 transform: translate(var(--moveX), var(--moveY));
@@ -129,13 +147,14 @@
         .portal-button {
             position: relative;
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            will-change: transform;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            will-change: transform, box-shadow;
+            border: 2px solid var(--primary);
         }
 
         .portal-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+            box-shadow: 0 4px 8px rgba(0, 188, 212, 0.3);
         }
 
         .portal-button::before {
@@ -145,7 +164,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: transform 0.5s ease;
             will-change: transform;
         }
@@ -153,9 +172,127 @@
         .portal-button:hover::before {
             transform: translateX(200%);
         }
+
+        .glitch {
+            position: relative;
+            animation: glitch-skew 1s infinite linear alternate-reverse;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--secondary);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--primary-light), 2px 2px var(--secondary);
+            animation: glitch-anim2 1s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                clip: rect(31px, 9999px, 94px, 0);
+                transform: skew(0.15deg);
+            }
+            20% {
+                clip: rect(57px, 9999px, 97px, 0);
+                transform: skew(0.25deg);
+            }
+            40% {
+                clip: rect(70px, 9999px, 71px, 0);
+                transform: skew(0.15deg);
+            }
+            60% {
+                clip: rect(13px, 9999px, 69px, 0);
+                transform: skew(0.25deg);
+            }
+            80% {
+                clip: rect(71px, 9999px, 86px, 0);
+                transform: skew(0.15deg);
+            }
+            100% {
+                clip: rect(66px, 9999px, 73px, 0);
+                transform: skew(0.25deg);
+            }
+        }
+
+        @keyframes glitch-anim2 {
+            0% {
+                clip: rect(65px, 9999px, 99px, 0);
+                transform: skew(0.05deg);
+            }
+            20% {
+                clip: rect(57px, 9999px, 88px, 0);
+                transform: skew(0.1deg);
+            }
+            40% {
+                clip: rect(97px, 9999px, 93px, 0);
+                transform: skew(0.05deg);
+            }
+            60% {
+                clip: rect(26px, 9999px, 48px, 0);
+                transform: skew(0.1deg);
+            }
+            80% {
+                clip: rect(50px, 9999px, 53px, 0);
+                transform: skew(0.05deg);
+            }
+            100% {
+                clip: rect(65px, 9999px, 54px, 0);
+                transform: skew(0.1deg);
+            }
+        }
+
+        @keyframes glitch-skew {
+            0% {
+                transform: skew(-1deg);
+            }
+            10% {
+                transform: skew(-0.5deg);
+            }
+            20% {
+                transform: skew(2deg);
+            }
+            30% {
+                transform: skew(-0.5deg);
+            }
+            40% {
+                transform: skew(-1.5deg);
+            }
+            50% {
+                transform: skew(1deg);
+            }
+            60% {
+                transform: skew(0.5deg);
+            }
+            70% {
+                transform: skew(-2deg);
+            }
+            80% {
+                transform: skew(1.5deg);
+            }
+            90% {
+                transform: skew(0.5deg);
+            }
+            100% {
+                transform: skew(0deg);
+            }
+        }
     </style>
 </head>
-<body class="text-white min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+<body class="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
     <div class="animated-bg">
         <div class="circle"></div>
         <div class="circle"></div>
@@ -163,21 +300,21 @@
         <div class="circle"></div>
     </div>
 
-    <div class="z-10 text-center px-4 sm:px-6 max-w-3xl mx-auto">
+    <div class="z-10 text-center px-4 sm:px-6 max-w-4xl mx-auto">
         <img src="https://i.ibb.co/XYk4dXn/image.png" alt="AjiroDesu Logo" 
              class="w-24 h-24 mx-auto mb-8 floating">
 
-        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-            <script>document.write(window.appConfig.title2);</script>
+        <h1 id="glitchTitle" class="glitch text-5xl sm:text-6xl md:text-7xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent" data-text="Rest API Portal">
+            Rest API Portal
         </h1>
 
         <p class="text-lg sm:text-xl text-gray-400 mb-12">
-            Free REST API for your bot and other projects.
+            Professional REST API solutions for your projects and applications.
         </p>
 
         <a href="/docs" 
-           class="portal-button inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white bg-transparent border-2 border-cyan-500 rounded-lg">
-            <span class="relative z-10">Enter Portal</span>
+           class="portal-button inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-on-primary bg-primary hover:bg-primary-dark rounded-lg shadow-md transition-all duration-300">
+            <span class="relative z-10">Portal</span>
         </a>
     </div>
 
@@ -187,7 +324,7 @@
             <a href="https://facebook.com/lance.cochangco" 
                target="_blank" 
                rel="noopener noreferrer"
-               class="text-cyan-400 hover:text-cyan-300 transition-colors">
+               class="text-primary hover:text-primary-dark transition-colors">
                 AjiroDesu
             </a>
         </p>
@@ -231,6 +368,12 @@
 
             // Create particles at a controlled rate
             setInterval(createParticle, 200);
+
+            // Set the title with glitch effect
+            const glitchTitle = document.getElementById('glitchTitle');
+            const titleText = "Rest API Portal";
+            glitchTitle.textContent = titleText;
+            glitchTitle.setAttribute('data-text', titleText);
         });
     </script>
 </body>
