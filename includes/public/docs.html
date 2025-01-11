@@ -22,15 +22,17 @@
                         "gradient-end": "#1e90ff"
                     },
                     fontFamily: {
-                        'sans': ['Helvetica', 'Arial', 'sans-serif'],
+                        'sans': ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
                     },
                 },
             },
         }
     </script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
         body {
-            font-family: 'Helvetica', Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: #020617;
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(0, 255, 255, 0.05) 0%, transparent 20%),
@@ -76,19 +78,19 @@
         .animate-pulse-scale {
             animation: pulse-scale 2s ease-in-out infinite;
         }
-        @keyframes slideDown {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(180deg); }
-        }
-        @keyframes slideUp {
-            0% { transform: rotate(180deg); }
+        @keyframes rotateRight {
+            0% { transform: rotate(-90deg); }
             100% { transform: rotate(0deg); }
         }
-        .slide-down {
-            animation: slideDown 0.3s ease-in-out forwards;
+        @keyframes rotateDown {
+            0% { transform: rotate(-90deg); }
+            100% { transform: rotate(0deg); }
         }
-        .slide-up {
-            animation: slideUp 0.3s ease-in-out forwards;
+        .rotate-right {
+            animation: rotateRight 0.3s ease-in-out forwards;
+        }
+        .rotate-down {
+            animation: rotateDown 0.3s ease-in-out forwards;
         }
         .gradient-bg {
             background: linear-gradient(135deg, #00ffff, #00bfff, #1e90ff);
@@ -97,10 +99,8 @@
             background: linear-gradient(135deg, #00ffff, #00bfff, #1e90ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-family: 'Helvetica', Arial, sans-serif;
         }
         .helvetica-heading {
-            font-family: 'Helvetica', Arial, sans-serif;
             font-weight: 700;
         }
         .scrollbar-hide::-webkit-scrollbar {
@@ -109,6 +109,19 @@
         .scrollbar-hide {
             -ms-overflow-style: none;
             scrollbar-width: none;
+        }
+        @keyframes fadeInScale {
+          0% {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        .card-animate {
+          animation: fadeInScale 0.5s ease-out forwards;
         }
     </style>
 </head>
@@ -170,59 +183,7 @@
 
             <!-- Main content -->
             <main id="mainContent" class="flex-1 px-4 py-4 bg-gray-900 bg-opacity-50">
-                <div class="max-w-7xl mx-auto space-y-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="bg-gray-800 bg-opacity-80 rounded-lg border-2 border-gradient-mid px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
-                            <div class="gradient-text mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                </svg>
-                            </div>
-                            <h3 class="text-sm font-medium text-gray-100 mb-1 helvetica-heading">Total Endpoints</h3>
-                            <p id="totalEndpoints" class="text-2xl font-semibold text-white loading-pulse gradient-text">--</p>
-                        </div>
-
-                        <div class="bg-gray-800 bg-opacity-80 rounded-lg border-2 border-gradient-mid px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
-                            <div class="gradient-text mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                                </svg>
-                            </div>
-                            <h3 class="text-sm font-medium text-gray-100 mb-1 helvetica-heading">Total Categories</h3>
-                            <p id="totalCategories" class="text-2xl font-semibold text-white loading-pulse gradient-text">--</p>
-                        </div>
-
-                        <div class="bg-gray-800 bg-opacity-80 rounded-lg border-2 border-gradient-mid px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
-                            <div class="gradient-text mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                </svg>
-                            </div>
-                            <h3 class="text-sm font-medium text-gray-100 mb-1 helvetica-heading">Battery</h3>
-                            <p class="text-2xl font-semibold text-white loading-pulse gradient-text" id="batteryLevel">--</p>
-                        </div>
-
-                        <div class="bg-gray-800 bg-opacity-80 rounded-lg border-2 border-gradient-mid px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
-                            <div class="gradient-text mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                            </div>
-                            <h3 class="text-sm font-medium text-gray-100 mb-1 helvetica-heading">Current Date</h3>
-                            <p class="text-2xl font-semibold text-white loading-pulse gradient-text" id="currentDate">--</p>
-                        </div>
-
-                        <div class="bg-gray-800 bg-opacity-80 rounded-lg border-2 border-gradient-mid px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg">
-                            <div class="gradient-text mb-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            </div>
-                            <h3 class="text-sm font-medium text-gray-100 mb-1 helvetica-heading">Current Time</h3>
-                            <p class="text-2xl font-semibold text-white loading-pulse gradient-text" id="currentTime">--</p>
-                        </div>
-                    </div>
-                </div>
+                <!-- Cards will be dynamically inserted here -->
             </main>
         </div>
     </div>
@@ -275,20 +236,69 @@
         }
     }
 
+    const cardData = [
+        {
+            icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>',
+            title: 'Total Endpoints',
+            id: 'totalEndpoints'
+        },
+        {
+            icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>',
+            title: 'Total Categories',
+            id: 'totalCategories'
+        },
+        {
+            icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>',
+            title: 'Battery',
+            id: 'batteryLevel'
+        },
+        {
+            icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>',
+            title: 'Current Date',
+            id: 'currentDate'
+        },
+        {
+            icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+            title: 'Current Time',
+            id: 'currentTime'
+        }
+    ];
+
+    function generateCardHTML(card, index) {
+        return `
+            <div class="bg-gray-800 bg-opacity-80 rounded-lg border-2 border-gradient-mid px-4 py-3 flex flex-col items-center justify-center h-32 shadow-lg card-animate" style="animation-delay: ${index * 0.1}s;">
+                <div class="gradient-text mb-2">
+                    ${card.icon}
+                </div>
+                <h3 class="text-sm font-medium text-gray-100 mb-1 helvetica-heading">${card.title}</h3>
+                <p id="${card.id}" class="text-2xl font-semibold text-white loading-pulse gradient-text">--</p>
+            </div>
+        `;
+    }
+
+    function renderCards() {
+        const mainContent = document.getElementById('mainContent');
+        const cardsHTML = cardData.map((card, index) => generateCardHTML(card, index)).join('');
+        mainContent.innerHTML = `
+            <div class="max-w-7xl mx-auto space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    ${cardsHTML}
+                </div>
+            </div>
+        `;
+    }
+
     function updateDashboard() {
         const totalEndpoints = apiList.length;
         const categories = new Set(apiList.map(api => api.category));
         const totalCategories = categories.size;
 
-        const totalEndpointsEl = document.getElementById('totalEndpoints');
-        const totalCategoriesEl = document.getElementById('totalCategories');
-
-        totalEndpointsEl.textContent = totalEndpoints;
-        totalCategoriesEl.textContent = totalCategories;
+        document.getElementById('totalEndpoints').textContent = totalEndpoints;
+        document.getElementById('totalCategories').textContent = totalCategories;
 
         // Remove loading animations
-        totalEndpointsEl.classList.remove('loading-pulse');
-        totalCategoriesEl.classList.remove('loading-pulse');
+        document.getElementById('totalEndpoints').classList.remove('loading-pulse');
+        document.getElementById('totalCategories').classList.remove('loading-pulse');
 
         renderCategories(apiList);
     }
@@ -351,7 +361,7 @@
             categoryButton.className = 'flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm font-medium text-gray-100 transition-colors duration-200 ease-in-out hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gradient-start';
             categoryButton.innerHTML = `
                 <span class="capitalize">${category}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform duration-200" style="transform: rotate(0deg);" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                 </svg>
             `;
@@ -366,17 +376,14 @@
             categoryButton.addEventListener('click', () => {
                 if (openCategoryDiv && openCategoryDiv !== endpointsDiv) {
                     openCategoryDiv.classList.add('hidden');
-                    openCategoryDiv.previousElementSibling.querySelector('svg').classList.remove('slide-down');
-                    openCategoryDiv.previousElementSibling.querySelector('svg').classList.add('slide-up');
+                    openCategoryDiv.previousElementSibling.querySelector('svg').style.transform = 'rotate(0deg)';
                 }
                 endpointsDiv.classList.toggle('hidden');
                 const arrow = categoryButton.querySelector('svg');
                 if (endpointsDiv.classList.contains('hidden')) {
-                    arrow.classList.remove('slide-down');
-                    arrow.classList.add('slide-up');
+                    arrow.style.transform = 'rotate(0deg)';
                 } else {
-                    arrow.classList.remove('slide-up');
-                    arrow.classList.add('slide-down');
+                    arrow.style.transform = 'rotate(180deg)';
                 }
                 openCategoryDiv = endpointsDiv.classList.contains('hidden') ? null : endpointsDiv;
             });
@@ -410,15 +417,23 @@
                 if (hasMatch) {
                     endpointsDiv.classList.remove('hidden');
                     const arrow = categoryDiv.querySelector('button svg');
-                    arrow.classList.remove('slide-up');
-                    arrow.classList.add('slide-down');
+                    arrow.classList.remove('rotate-right');
+                    arrow.classList.add('rotate-down');
                 }
             });
         }
     });
 
     // Initial fetch and render
-    fetchApiList();
+    async function initializeDashboard() {
+        await fetchApiList();
+        renderCards();
+        updateDashboard();
+        updateBatteryLevel();
+        updateDateTime();
+    }
+
+    initializeDashboard();
 
     // Dynamic greeting
     const greetingElement = document.getElementById('greeting');
@@ -484,8 +499,7 @@
         if (openCategoryDiv) {
             openCategoryDiv.classList.add('hidden');
             const arrow = openCategoryDiv.previousElementSibling.querySelector('svg');
-            arrow.classList.remove('slide-down');
-            arrow.classList.add('slide-up');
+            arrow.style.transform = 'rotate(0deg)';
             openCategoryDiv = null;
         }
         if (openEndpointDiv) {
@@ -526,7 +540,7 @@
     function updateDateTime() {
         const now = new Date();
         const dateOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
-        const timeOptions = { hour:'2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
 
         const dateEl = document.getElementById('currentDate');
         const timeEl = document.getElementById('currentTime');
@@ -537,10 +551,6 @@
         dateEl.classList.remove('loading-pulse');
         timeEl.classList.remove('loading-pulse');
     }
-
-    // Initial calls
-    updateBatteryLevel();
-    updateDateTime();
 
     // Update every second
     setInterval(updateDateTime, 1000);
