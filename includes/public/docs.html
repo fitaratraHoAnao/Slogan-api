@@ -123,10 +123,16 @@
         .card-animate {
           animation: fadeInScale 0.5s ease-out forwards;
         }
+        body.sidebar-open {
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="bg-deep-black text-gray-100">
     <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar Overlay -->
+        <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden z-40"></div>
+
         <!-- Sidebar -->
         <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-80 transform overflow-y-auto bg-gray-900 transition-all duration-300 ease-in-out -translate-x-full md:relative md:translate-x-0 scrollbar-hide">
             <div class="flex h-full flex-col">
@@ -161,7 +167,7 @@
         <!-- Main content -->
         <div class="relative flex flex-1 flex-col overflow-y-auto bg-deep-black">
             <!-- Header -->
-            <header class="sticky top-0 z-40 bg-gray-900 bg-opacity-90 border-b border-blue-500">
+            <header class="sticky top-0 z-30 bg-gray-900 bg-opacity-90 border-b border-blue-500">
                 <div class="container mx-auto">
                     <div class="flex flex-col">
                         <div class="flex h-16 items-center justify-between px-4">
@@ -182,7 +188,7 @@
             </header>
 
             <!-- Main content -->
-            <main id="mainContent" class="flex-1 px-4 py-4 bg-gray-900 bg-opacity-50">
+            <main id="mainContent" class="flex-1 px-4 py-4 bg-gray-900 bg-opacity-50 relative z-20">
                 <!-- Cards will be dynamically inserted here -->
             </main>
         </div>
@@ -494,6 +500,7 @@
     // Sidebar functionality
     const sidebar = document.getElementById('sidebar');
     const toggleSidebarBtn = document.getElementById('toggleSidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
 
     function closeAllCategories() {
         if (openCategoryDiv) {
@@ -508,17 +515,26 @@
         }
     }
 
-    toggleSidebarBtn.addEventListener('click', () => {
+    function toggleSidebar() {
         sidebar.classList.toggle('-translate-x-full');
+        sidebarOverlay.classList.toggle('hidden');
+        document.body.classList.toggle('sidebar-open');
         if (sidebar.classList.contains('-translate-x-full')) {
             closeAllCategories();
         }
+    }
+
+    toggleSidebarBtn.addEventListener('click', toggleSidebar);
+
+    sidebarOverlay.addEventListener('click', () => {
+        toggleSidebar();
     });
 
     document.addEventListener('click', (e) => {
-        if (!sidebar.contains(e.target) && !toggleSidebarBtn.contains(e.target)) {
-            sidebar.classList.add('-translate-x-full');
-            closeAllCategories();
+        if (!sidebar.contains(e.target) && !toggleSidebarBtn.contains(e.target) && !sidebarOverlay.contains(e.target)) {
+            if (!sidebar.classList.contains('-translate-x-full')) {
+                toggleSidebar();
+            }
         }
     });
 
@@ -569,7 +585,7 @@
             closeWelcomePopupBtn.classList.add('animate-pulse-scale');
 
             closeWelcomePopupBtn.addEventListener('click', () => {
-                closeWelcomePopupBtn.classList.remove('animate-pulse-scale');
+                closeWelcomePopupBtn.classList.remove('animate-pulsescale');
                 welcomePopup.classList.add('hidden');
                 localStorage.setItem('welcomePopupShown', 'true');
             });
@@ -625,3 +641,4 @@
     </script>
 </body>
 </html>
+
