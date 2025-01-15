@@ -126,6 +126,67 @@
         body.sidebar-open {
             overflow: hidden;
         }
+        .icon-highlight {
+          position: relative;
+        }
+        .icon-highlight::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: rgba(59, 130, 246, 0.2);
+          z-index: -1;
+        }
+        .icon-highlight:focus {
+            outline: none;
+        }
+
+        /* Scrollbar styles */
+        .custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 191, 255, 0.5) transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 191, 255, 0.5);
+            border-radius: 20px;
+            border: transparent;
+        }
+
+        /* Hide scrollbar by default, show on hover/scroll */
+        .hide-scrollbar {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar:hover,
+        .hide-scrollbar:focus,
+        .hide-scrollbar:focus-within {
+            scrollbar-width: thin;
+            -ms-overflow-style: auto;
+        }
+
+        .hide-scrollbar:hover::-webkit-scrollbar,
+        .hide-scrollbar:focus::-webkit-scrollbar,
+        .hide-scrollbar:focus-within::-webkit-scrollbar {
+            display: block;
+        }
     </style>
 </head>
 <body class="bg-deep-black text-gray-100">
@@ -134,7 +195,7 @@
         <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden z-40"></div>
 
         <!-- Sidebar -->
-        <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-80 transform overflow-y-auto bg-gray-900 transition-all duration-300 ease-in-out -translate-x-full md:relative md:translate-x-0 scrollbar-hide">
+        <div id="sidebar" class="fixed inset-y-0 left-0 z-50 w-80 transform overflow-y-auto bg-gray-900 transition-all duration-300 ease-in-out -translate-x-full md:relative md:translate-x-0 custom-scrollbar hide-scrollbar">
             <div class="flex h-full flex-col">
                 <div class="flex flex-col">
                     <div class="flex items-center justify-between p-4 h-16">
@@ -158,26 +219,26 @@
                         </svg>
                     </div>
                 </div>
-                <nav id="sidebarNav" class="flex-1 space-y-1 px-3 py-3 custom-scrollbar">
+                <nav id="sidebarNav" class="flex-1 space-y-1 px-3 py-3">
                     <!-- API categories and endpoints will be dynamically inserted here -->
                 </nav>
             </div>
         </div>
 
         <!-- Main content -->
-        <div class="relative flex flex-1 flex-col overflow-y-auto bg-deep-black">
+        <div class="relative flex flex-1 flex-col overflow-y-auto bg-deep-black custom-scrollbar hide-scrollbar">
             <!-- Header -->
             <header class="sticky top-0 z-30 bg-gray-900 bg-opacity-90 border-b border-blue-500">
                 <div class="container mx-auto">
                     <div class="flex flex-col">
                         <div class="flex h-16 items-center justify-between px-4">
-                            <button id="toggleSidebar" class="md:hidden text-gray-100 hover:text-white focus:outline-none focus:ring-2 focus:ring-gradient-start p-2 rounded-md">
+                            <button id="toggleSidebar" class="md:hidden text-gray-100 hover:text-white focus:outline-none p-2 rounded-md icon-highlight">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-16 6h16" />
                                 </svg>
                             </button>
                             <div id="greeting" class="text-sm font-medium text-gray-100 gradient-text"></div>
-                            <button id="showNotifications" class="text-gray-100 hover:text-white focus:outline-none focus:ring-2 focus:ring-gradient-start p-2 rounded-md">
+                            <button id="showNotifications" class="text-gray-100 hover:text-white focus:outline-none p-2 rounded-md icon-highlight">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                                 </svg>
@@ -540,21 +601,30 @@
 
     // Swipe right to open sidebar
     let touchStartX = 0;
+    let touchStartY = 0;
     let touchEndX = 0;
+    let touchEndY = 0;
 
     document.addEventListener('touchstart', e => {
         touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
     });
 
     document.addEventListener('touchend', e => {
         touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
         handleSwipe();
     });
 
     function handleSwipe() {
-        const swipeThreshold = 100; // Minimum distance for a swipe
-        if (touchEndX - touchStartX > swipeThreshold) {
-            // Swipe right
+        const swipeThresholdX = 100; // Minimum horizontal distance for a swipe
+        const swipeThresholdY = 50; // Maximum vertical distance allowed
+
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = Math.abs(touchEndY - touchStartY);
+
+        if (deltaX > swipeThresholdX && deltaY < swipeThresholdY) {
+            // Swipe right (with limited vertical movement)
             if (sidebar.classList.contains('-translate-x-full')) {
                 toggleSidebar();
             }
