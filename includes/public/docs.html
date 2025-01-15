@@ -538,6 +538,29 @@
         }
     });
 
+    // Swipe right to open sidebar
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        const swipeThreshold = 100; // Minimum distance for a swipe
+        if (touchEndX - touchStartX > swipeThreshold) {
+            // Swipe right
+            if (sidebar.classList.contains('-translate-x-full')) {
+                toggleSidebar();
+            }
+        }
+    }
+
     // Battery and time functions
     function updateBatteryLevel() {
         const batteryEl = document.getElementById('batteryLevel');
@@ -585,7 +608,7 @@
             closeWelcomePopupBtn.classList.add('animate-pulse-scale');
 
             closeWelcomePopupBtn.addEventListener('click', () => {
-                closeWelcomePopupBtn.classList.remove('animate-pulsescale');
+                closeWelcomePopupBtn.classList.remove('animate-pulse-scale');
                 welcomePopup.classList.add('hidden');
                 localStorage.setItem('welcomePopupShown', 'true');
             });
