@@ -218,16 +218,24 @@
                     <div class="flex flex-col">
                         <div class="flex h-16 items-center justify-between px-4">
                             <button id="toggleSidebar" class="md:hidden text-gray-100 hover:text-white focus:outline-none p-2 rounded-md">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
-    </svg>
-                            </button>
-                            <div id="greeting" class="text-sm font-medium text-gray-100 gradient-text"></div>
-                            <button id="showNotifications" class="text-gray-100 hover:text-white focus:outline-none p-2 rounded-md">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
                                 </svg>
                             </button>
+                            <div id="greeting" class="text-sm font-medium text-gray-100 gradient-text"></div>
+                            <div class="flex items-center">
+                                <!-- New API Tester Button -->
+                                <button id="apiTesterBtn" class="text-gray-100 hover:text-white focus:outline-none p-2 rounded-md mr-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </button>
+                                <button id="showNotifications" class="text-gray-100 hover:text-white focus:outline-none p-2 rounded-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -280,12 +288,25 @@
     async function fetchApiList() {
         try {
             const response = await fetch('/api-list');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             const data = await response.json();
             apiList = data.apis;
             updateDashboard();
         } catch (error) {
             console.error('Error fetching API list:', error);
+            showErrorMessage('Failed to fetch API list. Please try again later.');
         }
+    }
+
+    function showErrorMessage(message) {
+        const mainContent = document.getElementById('mainContent');
+        mainContent.innerHTML = `
+            <div class="bg-red-500 text-white p-4 rounded-md">
+                <p>${message}</p>
+            </div>
+        `;
     }
 
     const cardData = [
@@ -371,13 +392,22 @@
         endpointDetails.innerHTML = `
             <p class="mb-2"><strong class="text-gray-100">Endpoint:</strong> <span class="break-all">${endpoint.endpoint}</span></p>
             <p class="mb-3"><strong class="text-gray-100">Description:</strong> ${endpoint.description}</p>
-            <a href="${endpoint.endpoint}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-full px-3 py-1.5 text-sm font-medium text-white gradient-bg rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gradient-start transition-colors duration-200 ease-in-out">
-                Access API
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                    <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                </svg>
-            </a>
+            <div class="flex justify-between items-center">
+                <a href="${endpoint.endpoint}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-3 py-1.5 text-sm font-medium text-white gradient-bg rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gradient-start transition-colors duration-200 ease-in-out">
+                    Access API
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
+                        <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
+                    </svg>
+                </a>
+                <button class="copy-btn inline-flex items-center justify-center px-3 py-1.5 text-sm font-medium text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200 ease-in-out">
+                    Copy
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                        <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                    </svg>
+                </button>
+            </div>
         `;
 
         endpointButton.addEventListener('click', () => {
@@ -386,6 +416,23 @@
             }
             endpointDetails.classList.toggle('hidden');
             openEndpointDiv = endpointDetails.classList.contains('hidden') ? null : endpointDetails;
+        });
+
+        const copyBtn = endpointDetails.querySelector('.copy-btn');
+        copyBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigator.clipboard.writeText(endpoint.endpoint).then(() => {
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = `
+                        Copy
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                            <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                        </svg>
+                    `;
+                }, 2000);
+            });
         });
 
         endpointDiv.appendChild(endpointButton);
@@ -469,8 +516,7 @@
                 if (hasMatch) {
                     endpointsDiv.classList.remove('hidden');
                     const arrow = categoryDiv.querySelector('button svg');
-                    arrow.classList.remove('rotate-right');
-                    arrow.classList.add('rotate-down');
+                    arrow.style.transform = 'rotate(180deg)';
                 }
             });
         }
@@ -716,6 +762,84 @@
     }
 
     updateDynamicContent();
+
+    // API Tester functionality
+    const apiTesterBtn = document.getElementById('apiTesterBtn');
+    apiTesterBtn.addEventListener('click', () => {
+        const apiTesterHTML = `
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-gray-800 bg-opacity-90 rounded-xl shadow-lg overflow-hidden border-2 border-gradient-mid">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-bold gradient-text helvetica-heading">API Tester</h2>
+                            <button id="closeApiTester" class="text-gray-100 hover:text-white focus:outline-none focus:ring-2 focus:ring-gradient-start p-2 rounded-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="apiUrl" class="block text-sm font-medium text-gray-300">API URL</label>
+                                <input type="text" id="apiUrl" class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gradient-start focus:border-gradient-start">
+                            </div>
+                            <div>
+                                <label for="apiMethod" class="block text-sm font-medium text-gray-300">Method</label>
+                                <select id="apiMethod" class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-gradient-start focus:border-gradient-start">
+                                    <option>GET</option>
+                                    <option>POST</option>
+                                    <option>PUT</option>
+                                    <option>DELETE</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="apiHeaders" class="block text-sm font-medium text-gray-300">Headers (JSON)</label>
+                                <textarea id="apiHeaders" rows="3" class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gradient-start focus:border-gradient-start"></textarea>
+                            </div>
+                            <div>
+                                <label for="apiBody" class="block text-sm font-medium text-gray-300">Body (JSON)</label>
+                                <textarea id="apiBody" rows="5" class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gradient-start focus:border-gradient-start"></textarea>
+                            </div>
+                            <button id="sendRequest" class="w-full px-4 py-2 gradient-bg text-white rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-gradient-start focus:ring-opacity-50">Send Request</button>
+                            <div>
+                                <label for="apiResponse" class="block text-sm font-medium text-gray-300">Response</label>
+                                <textarea id="apiResponse" rows="10" readonly class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none" placeholder="Response will appear here..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        mainContent.innerHTML = apiTesterHTML;
+
+        const closeApiTesterBtn = document.getElementById('closeApiTester');
+        closeApiTesterBtn.addEventListener('click', () => {
+            location.reload();
+        });
+
+        const sendRequestBtn = document.getElementById('sendRequest');
+        sendRequestBtn.addEventListener('click', async () => {
+            const url = document.getElementById('apiUrl').value;
+            const method = document.getElementById('apiMethod').value;
+            const headers = JSON.parse(document.getElementById('apiHeaders').value || '{}');
+            const body = document.getElementById('apiBody').value;
+            const responseTextarea = document.getElementById('apiResponse');
+
+            try {
+                const response = await fetch(url, {
+                    method,
+                    headers,
+                    body: method !== 'GET' ? body : undefined
+                });
+
+                const responseData = await response.text();
+                responseTextarea.value = responseData;
+            } catch (error) {
+                responseTextarea.value = `Error: ${error.message}`;
+            }
+        });
+    });
     </script>
 </body>
 </html>
