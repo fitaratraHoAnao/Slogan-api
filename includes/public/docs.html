@@ -264,7 +264,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 gradient-text mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                     </svg>
-                    <p class="text-gray-100">Click on endpoints to view details and access links</p>
+                    <p class="text-gray-100">Click on endpoints to view details and access the api or copy the api link</p>
                 </div>
                 <div class="flex items-start">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 gradient-text mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -272,6 +272,12 @@
                     </svg>
                     <p class="text-gray-100">Use the search bar to find specific APIs</p>
                 </div>
+            <div class="flex items-start">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 gradient-text mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                    <p class="text-gray-100">And if copy the endpoints link you can go back to home and press the button that is before notification icon</p>
+            </div>
             </div>
             <button id="closeWelcomePopup" class="mt-6 w-full gradient-bg text-white py-2 px-4 rounded-md hover:opacity-90 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gradient-start focus:ring-opacity-50 transform hover:scale-105 helvetica-heading">
                 Get Started
@@ -833,8 +839,23 @@
                     body: method !== 'GET' ? body : undefined
                 });
 
-                const responseData = await response.text();
-                responseTextarea.value = responseData;
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const jsonResponse = await response.json();
+                    responseTextarea.value = JSON.stringify(jsonResponse, null, 2);
+                } else if (contentType && contentType.includes('image')) {
+                    const blob = await response.blob();
+                    const imageUrl = URL.createObjectURL(blob);
+                    responseTextarea.value = 'Image received. See below:';
+                    const img = document.createElement('img');
+                    img.src = imageUrl;
+                    img.style.maxWidth = '100%';
+                    img.style.marginTop = '10px';
+                    responseTextarea.parentNode.appendChild(img);
+                } else {
+                    const textResponse = await response.text();
+                    responseTextarea.value = textResponse;
+                }
             } catch (error) {
                 responseTextarea.value = `Error: ${error.message}`;
             }
