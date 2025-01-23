@@ -532,8 +532,7 @@
     async function initializeDashboard() {
         await fetchApiList();
         renderCards();
-        updateDashboard();
-        updateBatteryLevel();
+        updateDashboard();        updateBatteryLevel();
         updateDateTime();
     }
 
@@ -785,9 +784,28 @@
                             </button>
                         </div>
                         <div class="space-y-4">
-                            <div>
-                                <label for="apiUrl" class="block text-sm font-medium text-gray-300">API URL</label>
-                                <input type="text" id="apiUrl" class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gradient-start focus:border-gradient-start">
+                            <div class="space-y-4">
+                                <div class="relative">
+                                    <button id="apiSelectBtn" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-gradient-start focus:border-gradient-start flex justify-between items-center">
+                                        <span id="apiSelectText">Select API</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                    <div id="apiDropdown" class="absolute z-10 w-full mt-1 bg-gray-700 border border-gray-600 rounded-md shadow-lg hidden">
+                                        <ul class="py-1 max-h-60 overflow-auto custom-scrollbar">
+                                            <!-- API options will be dynamically inserted here -->
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <input type="text" id="apiUrl" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gradient-start focus:border-gradient-start pr-8" placeholder="Enter API URL">
+                                    <button id="clearApiUrl" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                             <div>
                                 <label for="apiMethod" class="block text-sm font-medium text-gray-300">Method</label>
@@ -860,6 +878,60 @@
                 responseTextarea.value = `Error: ${error.message}`;
             }
         });
+
+
+        function clearApiTesterContent() {
+            document.getElementById('apiHeaders').value = '';
+            document.getElementById('apiBody').value = '';
+            document.getElementById('apiResponse').value = '';
+            const img = document.querySelector('#apiResponse + img');
+            if (img) img.remove();
+        }
+
+        function populateApiDropdown() {
+            const dropdown = document.getElementById('apiDropdown');
+            const ul = dropdown.querySelector('ul');
+            ul.innerHTML = '';
+            apiList.forEach(api => {
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="#" class="block px-4 py-2 text-sm text-white hover:bg-gray-600">${api.name}</a>`;
+                li.querySelector('a').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.getElementById('apiUrl').value = api.endpoint;
+                    document.getElementById('apiSelectText').textContent = api.name;
+                    dropdown.classList.add('hidden');
+                    clearApiTesterContent();
+                });
+                ul.appendChild(li);
+            });
+        }
+
+        document.getElementById('apiSelectBtn').addEventListener('click', () => {
+            const dropdown = document.getElementById('apiDropdown');
+            dropdown.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('apiDropdown');
+            const selectBtn = document.getElementById('apiSelectBtn');
+            if (!selectBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        document.getElementById('clearApiUrl').addEventListener('click', () => {
+            document.getElementById('apiUrl').value = '';
+            document.getElementById('apiSelectText').textContent = 'Select API';
+            clearApiTesterContent();
+        });
+
+        // Update the API Tester initialization
+        function initializeApiTester() {
+            populateApiDropdown();
+        }
+
+        // Call this function when initializing the API Tester
+        initializeApiTester();
     });
     </script>
 </body>
