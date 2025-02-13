@@ -1,8 +1,15 @@
 {
-  "build": {
-    "env": {
-      "PKG_CONFIG_PATH": "/usr/local/lib/pkgconfig",
-      "LD_LIBRARY_PATH": "/usr/local/lib"
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["node_modules/canvas/**/*"]
+      }
     }
-  }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "index.js" }
+  ]
 }
