@@ -1,5 +1,11 @@
 {
   "version": 2,
+  "build": {
+    "env": {
+      "PKG_CONFIG_PATH": "/usr/local/lib/pkgconfig",
+      "LD_LIBRARY_PATH": "/usr/local/lib"
+    }
+  },
   "builds": [
     {
       "src": "index.js",
